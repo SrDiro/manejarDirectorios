@@ -1,6 +1,7 @@
 package manejardiretorios;
 
 import Modelo.AccionesDirectorio;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,6 +13,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -34,8 +36,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private RadioButton rbArchivoNuevo;
     @FXML
-    private TextField rfContenidoFiltrado;
-    @FXML
     private TextField tfFiltradoTamano;
     @FXML
     private TextField tfNombreArchivo;
@@ -44,36 +44,54 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TextArea taPantalla;
 
-    AccionesDirectorio ad;
-    String ruta;
-    
-    Stage stage;
+    AccionesDirectorio ad = new AccionesDirectorio();
+    File ruta;
+    @FXML
+    private TextField tfContenidoFiltrado;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        ruta = fileChooser.showOpenDialog(stage) + "";
-        tfRuta.setText(ruta);
+        tfRuta.setEditable(false);
+        taPantalla.setEditable(false);
         
-        
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Open Resource File");
+        ruta = directoryChooser.showDialog(null);
+        tfRuta.setText(ruta.getAbsolutePath());
+
     }
 
     @FXML
     private void abrirRuta(ActionEvent event) {
 
         if (botonAbrir.isFocused()) {
-
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setTitle("Open Resource File");
+            ruta = directoryChooser.showDialog(null);
+            tfRuta.setText(ruta.getAbsolutePath());
         }
 
     }
 
     @FXML
     private void ejecutarOpcion(ActionEvent event) throws IOException {
-
+        String archivos;
+        String nombreArchivo;
+        
         if (rbContenidoDirectorio.isSelected()) {
-            taPantalla.setText(ad.listar(ruta));
+            
+            archivos = ad.listar(ruta.getAbsolutePath());
+            taPantalla.setText(archivos);
+            
+        } else if (rbContenidoFiltrado.isSelected()) {
+            
+            nombreArchivo = tfContenidoFiltrado.getText();
+            archivos = ad.filtrarNombre(nombreArchivo, ruta.getAbsolutePath());
+            taPantalla.setText(archivos);
+            
+        } else if (true) {
+            
         }
 
     }
