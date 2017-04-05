@@ -78,6 +78,7 @@ public class FXMLDocumentController implements Initializable {
     private void ejecutarOpcion(ActionEvent event) throws IOException {
         String archivos;
         String nombreArchivo;
+        long tamanoArchivo;
         
         if (rbContenidoDirectorio.isSelected()) {
             
@@ -90,8 +91,15 @@ public class FXMLDocumentController implements Initializable {
             archivos = ad.filtrarNombre(nombreArchivo, ruta.getAbsolutePath());
             taPantalla.setText(archivos);
             
-        } else if (true) {
+        } else if (rbSoloLectura.isSelected()) {
             
+            archivos = ad.filtrarLectura();
+            taPantalla.setText(archivos);
+        } else if (rbFiltradoTamano.isSelected()) {
+            
+            tamanoArchivo = Long.parseLong(tfFiltradoTamano.getText());
+            archivos = ad.filtrarTamano(tamanoArchivo, ruta.getAbsolutePath());
+            taPantalla.setText(archivos);
         }
 
     }

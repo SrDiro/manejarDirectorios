@@ -69,7 +69,7 @@ public class AccionesDirectorio {
 
         Iterator<Path> it = datos.iterator();
         while (it.hasNext()) {
-            
+
             archivos = it.next();
             tamano = Files.size(archivos);
             fechaModificacion = archivos.toFile().lastModified();
@@ -89,21 +89,55 @@ public class AccionesDirectorio {
         return respuesta;
     }
 
+    public String filtrarLectura() throws IOException {
+        String respuesta = "";
+
+        Stream<Path> datos = Files.list(directorio);
+
+        Iterator<Path> it = datos.iterator();
+        while (it.hasNext()) {
+            Path nombreArchivo = it.next();
+            if (Files.isReadable(nombreArchivo) && Files.isWritable(nombreArchivo)) {
+                respuesta += nombreArchivo + "\n";
+            }
+        }
+
+        return respuesta;
+    }
+
     public String filtrarDirectorios() {
         String respuesta = "";
 
         return respuesta;
     }
 
-    public String filtrarTamano() {
+    public String filtrarTamano(long tamano, String ruta) throws IOException {
         String respuesta = "";
+        Path archivos;
+        long tamanoArchivo;
+        
+        directorio = Paths.get(ruta);
+        
+        
+        Stream<Path> datos = Files.list(directorio);
 
+        Iterator<Path> it = datos.iterator();
+        while (it.hasNext()) {
+
+            archivos = it.next();
+            tamanoArchivo = Files.size(archivos);
+
+            if (tamanoArchivo >= tamano) {
+                respuesta += "Archivo '" + archivos.getFileName() + "' --> Tamaño " + tamanoArchivo + " kB \n";
+            }
+
+        }
         return respuesta;
     }
 
     public String archivoNuevo() {
         String respuesta = "";
-
+            
         return respuesta;
     }
 
